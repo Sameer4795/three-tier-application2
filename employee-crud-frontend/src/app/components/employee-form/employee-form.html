@@ -1,0 +1,60 @@
+<form #employeeForm="ngForm" (ngSubmit)="onSubmit(employeeForm)" autocomplete="off">
+  <div class="form-container">
+
+    <!-- Name -->
+    <label>Name:</label>
+    <input [(ngModel)]="employee.name" name="name" type="text" required autocomplete="off" minlength="7"
+      #name="ngModel" />
+    <div class="error" *ngIf="(employeeForm.submitted || name.touched) && name.errors">
+      <span *ngIf="name.errors['required']">Name is required.</span>
+      <span *ngIf="name.errors['minlength']">Name must be at least 7 characters.</span>
+    </div>
+
+    <!-- Email -->
+    <label>Email:</label>
+    <input [(ngModel)]="employee.email" name="email" type="email" autocomplete="off" required email #email="ngModel" />
+    <div class="error" *ngIf="(employeeForm.submitted || email.touched) && email.errors">
+      <span *ngIf="email.errors['required']">Email is required.</span>
+      <span *ngIf="email.errors['email']">Enter a valid email address.</span>
+    </div>
+
+    <!-- Department -->
+    <label>Department:</label>
+    <select [(ngModel)]="employee.departmentId" name="departmentId" required #department="ngModel">
+      <option value="" disabled>Select Department</option>
+      <option *ngFor="let dept of departments" [value]="dept.departmentId">
+        {{ dept.departmentName }}
+      </option>
+    </select>
+    <div class="error" *ngIf="(employeeForm.submitted || department.touched) && department.errors">
+      <span *ngIf="department.errors['required']">Department is required.</span>
+    </div>
+
+    <!-- Password Fields (only show when adding a new employee) -->
+    <ng-container *ngIf="!employee.employeeId">
+      <!-- Password -->
+      <label>Password:</label>
+      <input [(ngModel)]="employee.password" name="password" type="password" autocomplete="off" required minlength="8"
+        #password="ngModel" />
+      <div class="error" *ngIf="(employeeForm.submitted || password.touched) && password.errors">
+        <span *ngIf="password.errors['required']">Password is required.</span>
+        <span *ngIf="password.errors['minlength']">Password must be at least 8 characters.</span>
+      </div>
+
+      <!-- Confirm Password -->
+      <label>Confirm Password:</label>
+      <input [(ngModel)]="employee.confirmPassword" name="confirmPassword" type="password" autocomplete="off" required
+        #confirmPassword="ngModel" />
+      <div class="error" *ngIf="employeeForm.submitted || confirmPassword.touched">
+        <span *ngIf="confirmPassword.errors?.['required']">Confirm Password is required.</span>
+        <span *ngIf="employee.password !== employee.confirmPassword">Passwords do not match.</span>
+      </div>
+    </ng-container>
+
+  </div>
+
+  <div class="form-actions">
+    <button type="submit">Save</button>
+    <button type="button" (click)="goBack()" class="back-button">Back</button>
+  </div>
+</form>

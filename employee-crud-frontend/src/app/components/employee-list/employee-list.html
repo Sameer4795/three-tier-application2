@@ -1,0 +1,46 @@
+<h2>Employee List</h2>
+<button (click)="addEmployee()">Add Employee</button>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Department</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let emp of paginatedEmployees">
+      <td>{{ emp.employeeId }}</td>
+      <td>{{ emp.name }}</td>
+      <td>{{ emp.email }}</td>
+      <td>{{ emp.departmentName }}</td>
+      <td>
+        <!-- Edit Button -->
+        <button [routerLink]="['/employee/edit', emp.employeeId]">
+          Edit
+        </button>
+
+        <!-- Delete Button -->
+        <button class="delete-button" (click)="emp.employeeId !== undefined ? deleteEmployee(emp.employeeId) : null">
+          Delete
+        </button>
+      </td>
+
+    </tr>
+  </tbody>
+</table>
+<!-- Pagination Controls -->
+<div class="pagination">
+  <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+
+  <span *ngFor="let page of [].constructor(totalPages()); let i = index">
+    <button (click)="changePage(i + 1)" [class.active]="currentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+  </span>
+
+  <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages()">Next</button>
+</div>
